@@ -17,6 +17,7 @@ func NewFaucet() Service {
 				"4002/tcp": {},
 			},
 		},
+		DependsOn: nil,
 		HostConfig: &container.HostConfig{
 			// Links: []string{"neo-scan-api:4000"}, TODO: Add when container exists for linking.
 			PortBindings: map[nat.Port][]nat.PortBinding{

@@ -21,6 +21,7 @@ func NewPrivateNet() Service {
 				"30336/tcp": {},
 			},
 		},
+		DependsOn: nil,
 		HostConfig: &container.HostConfig{
 			PortBindings: map[nat.Port][]nat.PortBinding{
 				"20333/tcp": {
@@ -76,6 +77,7 @@ func NewPrivateNet() Service {
 			PublishAllPorts: true,
 		},
 		Image: "neo-privatenet",
+		Name:  "neo-privatenet",
 		Tag:   "2.8.0",
 	}
 }
