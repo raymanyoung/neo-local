@@ -32,7 +32,7 @@ func NewFaucet() Service {
 			PublishAllPorts: true,
 		},
 		Image: "neo-local-faucet",
-		Name:  "neo-faucet",
+		Name:  "neo-local-faucet",
 		Tag:   "latest",
 	}
 }
