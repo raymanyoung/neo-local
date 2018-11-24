@@ -88,9 +88,11 @@ func (s Start) action() func(c *cli.Context) error {
 			return err
 		}
 
+		serv, _ := stack.Services()
+
 		containerStarted := []string{}
 		loopLimit := 0
-		for len(containerStarted) < len(stack.Services()) {
+		for len(containerStarted) < len(serv) {
 			if err != nil {
 				return err
 			}
@@ -101,7 +103,7 @@ func (s Start) action() func(c *cli.Context) error {
 			}
 
 		serviceIteration:
-			for _, service := range stack.Services() {
+			for _, service := range serv {
 
 				for _, c := range containerStarted { // check if container is already up
 					if c == service.Name {
