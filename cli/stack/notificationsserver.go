@@ -2,22 +2,48 @@ package stack
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
-	"path/filepath"
 
+	"github.com/CityOfZion/neo-local/cli/config"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/go-connections/nat"
+	packr "github.com/gobuffalo/packr/v2"
 )
+
+func initFile(file string, box packr.Box) error {
+	dirPath, err := config.DirPath()
+	if err != nil {
+		return err
+	}
+
+	filename := fmt.Sprintf("%s/%s", dirPath, file)
+
+	if _, err = os.Stat(filename); os.IsNotExist(err) {
+		fileContent, err := box.Find(file)
+		if err != nil {
+			return err
+		}
+		err = ioutil.WriteFile(filename, fileContent, 0644)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
 
 // NewNotificationsServer creates a new service for the cityofzion/neo-python image.
 func NewNotificationsServer() (Service, error) {
-	pwd, err := os.Getwd()
+	box := packr.New("notificationsBox", "./../../notifications-server")
+	initFile("notifications-server.config.json", *box)
+
+	dirPath, err := config.DirPath()
 	if err != nil {
 		return Service{}, err
 	}
 
 	binds := []string{
-		fmt.Sprintf("%s:/configs", filepath.Dir(pwd)),
+		fmt.Sprintf("%s:/configs", dirPath),
 	}
 
 	return Service{
