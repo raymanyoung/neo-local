@@ -136,6 +136,7 @@ func (s Start) action() func(c *cli.Context) error {
 
 				containerStarted = append(containerStarted, service.Name)
 			}
+
 			loopLimit++
 		}
 		return nil
