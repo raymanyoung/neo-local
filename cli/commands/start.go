@@ -105,7 +105,7 @@ func (s Start) action() func(c *cli.Context) error {
 		serviceIteration:
 			for _, service := range serv {
 
-				for _, c := range containerStarted { // check if container is already up
+				for _, c := range containerStarted {
 					if c == service.Name {
 						continue serviceIteration
 					}
