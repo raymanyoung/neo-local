@@ -17,7 +17,6 @@ func NewPostgres() Service {
 			},
 			ExposedPorts: map[nat.Port]struct{}{"5432/tcp": {}},
 		},
-		DependsOn:  nil,
 		HostConfig: nil,
 		Image:      "postgres",
 		Name:       "postgres",
