@@ -24,25 +24,6 @@ func NewStart() Start {
 	return Start{}
 }
 
-func sliceSubsetCheck(first, second []string) bool {
-	set := make(map[string]int)
-	for _, value := range second {
-		set[value]++
-	}
-
-	for _, value := range first {
-		if count, found := set[value]; !found {
-			return false
-		} else if count < 1 {
-			return false
-		} else {
-			set[value] = count - 1
-		}
-	}
-
-	return true
-}
-
 // ToCommand generates the CLI command struct.
 func (s Start) ToCommand() cli.Command {
 	return cli.Command{
@@ -158,4 +139,23 @@ func (s Start) flags() []cli.Flag {
 		// 	Usage: "Enable verbose logging (default: false)",
 		// },
 	}
+}
+
+func sliceSubsetCheck(first, second []string) bool {
+	set := make(map[string]int)
+	for _, value := range second {
+		set[value]++
+	}
+
+	for _, value := range first {
+		if count, found := set[value]; !found {
+			return false
+		} else if count < 1 {
+			return false
+		} else {
+			set[value] = count - 1
+		}
+	}
+
+	return true
 }
