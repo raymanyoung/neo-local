@@ -111,7 +111,7 @@ func (s Start) action() func(c *cli.Context) error {
 					}
 				}
 
-				if service.DependsOn != nil { // check if container depends on another
+				if service.DependsOn != nil {
 					if sliceSubsetCheck(service.DependsOn, containerStarted) != true {
 						continue
 					}
