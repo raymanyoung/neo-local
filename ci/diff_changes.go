@@ -23,7 +23,7 @@ func main() {
 		"git", "merge-base", "FETCH_HEAD", "develop",
 	).Output()
 	if err != nil {
-		log.Println(string(developSHABytes))
+		log.Printf("Develop SHA output: '%s'", string(developSHABytes))
 		log.Fatal(err)
 	}
 
@@ -45,7 +45,7 @@ func main() {
 		"git", "--no-pager", "diff", "--name-only", "FETCH_HEAD", developSHA,
 	).Output()
 	if err != nil {
-		log.Println(string(filesChangedBytes))
+		log.Printf("Files changed output: '%s'", string(filesChangedBytes))
 		log.Fatal(err)
 	}
 
