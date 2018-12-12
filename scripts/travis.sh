@@ -11,7 +11,7 @@ then
   make check-version
 fi
 
-diff_changes=$(go run ./ci/diff_changes.go)
+diff_changes=$(go run ./ci/diff_changes.go -v)
 echo $diff_changes
 
 if [ "$diff_changes" = "both" ] || [ "$diff_changes" = "go" ]

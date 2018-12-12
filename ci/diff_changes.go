@@ -23,11 +23,13 @@ func main() {
 		"git", "merge-base", "FETCH_HEAD", "develop",
 	).Output()
 	if err != nil {
+		log.Println(string(developSHABytes))
 		log.Fatal(err)
 	}
 
 	developSHA := string(developSHABytes)
 	developSHA = strings.TrimSuffix(developSHA, "\n")
+	logfWithVerbose("Develop SHA: %s", developSHA)
 
 	if len(developSHA) != 40 {
 		log.Fatal(
@@ -43,11 +45,13 @@ func main() {
 		"git", "--no-pager", "diff", "--name-only", "FETCH_HEAD", developSHA,
 	).Output()
 	if err != nil {
+		log.Println(string(filesChangedBytes))
 		log.Fatal(err)
 	}
 
 	filesChanged := string(filesChangedBytes)
 	filesChanged = strings.TrimSuffix(filesChanged, "\n")
+	logfWithVerbose("Files Changed: %s", filesChanged)
 
 	directories := make(map[string]int)
 
