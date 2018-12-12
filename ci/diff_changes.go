@@ -14,35 +14,18 @@ var (
 )
 
 func main() {
+	travisCommitRange := os.Getenv("TRAVIS_COMMIT_RANGE")
+	if travisCommitRange == "" {
+		log.Fatalf("Expecting $TRAVIS_COMMIT_RANGE to not be empty")
+	}
+
 	args := os.Args[1:]
 	if len(args) > 0 && args[0] == "-v" {
 		verbose = true
 	}
 
-	developSHABytes, err := exec.Command(
-		"git", "merge-base", "FETCH_HEAD", "develop",
-	).Output()
-	if err != nil {
-		log.Printf("Develop SHA output: '%s'", string(developSHABytes))
-		log.Fatal(err)
-	}
-
-	developSHA := string(developSHABytes)
-	developSHA = strings.TrimSuffix(developSHA, "\n")
-	logfWithVerbose("Develop SHA: %s", developSHA)
-
-	if len(developSHA) != 40 {
-		log.Fatal(
-			fmt.Errorf(
-				"Expected develop branch SHA to be 40 character long, got: %s (%d long)",
-				developSHA,
-				len(developSHA),
-			),
-		)
-	}
-
 	filesChangedBytes, err := exec.Command(
-		"git", "--no-pager", "diff", "--name-only", "FETCH_HEAD", developSHA,
+		"git", "--no-pager", "diff", "--name-only", travisCommitRange,
 	).Output()
 	if err != nil {
 		log.Printf("Files changed output: '%s'", string(filesChangedBytes))
