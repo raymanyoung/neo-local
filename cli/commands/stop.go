@@ -52,11 +52,13 @@ func (s Stop) action() func(c *cli.Context) error {
 			return err
 		}
 
-		for containerName, containerID := range containerReferences {
-			if err := cli.ContainerStop(ctx, containerID, nil); err != nil {
+		for containerName, container := range containerReferences {
+			if err := cli.ContainerStop(ctx, container.ID, nil); err != nil {
 				return err
 			}
-			log.Printf("'%s' container stopped (%s)", containerName, containerID[:10])
+			log.Printf(
+				"'%s' container stopped (%s)", containerName, container.ID[:10],
+			)
 		}
 
 		return nil
