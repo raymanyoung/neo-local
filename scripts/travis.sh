@@ -18,6 +18,7 @@ if [ "$diff_changes" = "both" ] || [ "$diff_changes" = "go" ]
 then 
   # Build and test the CLI
   cd ./cli
+  dep ensure -v
   make build
   make test
   cd ..
