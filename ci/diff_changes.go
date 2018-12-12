@@ -51,7 +51,11 @@ func main() {
 
 	filesChanged := string(filesChangedBytes)
 	filesChanged = strings.TrimSuffix(filesChanged, "\n")
-	logfWithVerbose("Files Changed: %s", filesChanged)
+
+	if filesChanged == "" {
+		log.Println("No changes")
+		os.Exit(0)
+	}
 
 	directories := make(map[string]int)
 
