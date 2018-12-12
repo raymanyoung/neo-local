@@ -11,11 +11,20 @@ then
   make check-version
 fi
 
-# Build and test the CLI
-cd ./cli
-make build
-make test
-cd ..
+diff_changes=$(go run ./ci/diff_changes.go)
+echo $diff_changes
 
-# Test the Docker Compose stack
-make integration-tests
+if [ "$diff_changes" = "both" ] || [ "$diff_changes" = "go" ]
+then 
+  # Build and test the CLI
+  cd ./cli
+  make build
+  make test
+  cd ..
+fi
+
+if [ "$diff_changes" = "both" ] || [ "$diff_changes" = "other" ]
+then 
+  # Test the Docker Compose stack
+  make integration-tests
+fi
