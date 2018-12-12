@@ -53,7 +53,7 @@ func main() {
 	filesChanged = strings.TrimSuffix(filesChanged, "\n")
 
 	if filesChanged == "" {
-		log.Println("No changes")
+		fmt.Println("none")
 		os.Exit(0)
 	}
 

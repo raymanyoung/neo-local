@@ -19,10 +19,9 @@ before_install:
   - curl -L -s https://github.com/golang/dep/releases/download/v0.5.0/dep-linux-amd64 -o $GOPATH/bin/dep
   - chmod +x $GOPATH/bin/dep
   - printenv
-  - git fetch origin
   - git pull origin $TRAVIS_BRANCH
   - git pull origin develop
-  - git merge-base FETCH_HEAD develop
+  - git merge-base FETCH_HEAD origin develop
   - git --no-pager diff --name-only FETCH_HEAD $(git merge-base FETCH_HEAD develop)
 
 # Script step is run as part of a shell script as it requires a conditional.
