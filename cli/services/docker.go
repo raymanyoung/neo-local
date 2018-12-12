@@ -69,16 +69,16 @@ func PullDockerImages(ctx context.Context, cli *client.Client) error {
 
 // FetchContainerReferences finds the container ID for each service within the
 // stack.
-func FetchContainerReferences(ctx context.Context, cli *client.Client) (map[string]string, error) {
-	containerReferences := map[string]string{}
+func FetchContainerReferences(ctx context.Context, cli *client.Client) (map[string]*types.Container, error) {
+	containerReferences := map[string]*types.Container{}
 
-	containerNames, err := stack.ServiceContainerNames()
+	serviceContainerNames, err := stack.ServiceContainerNames()
 	if err != nil {
 		return nil, err
 	}
 
-	for _, containerName := range containerNames {
-		containerReferences[containerName] = ""
+	for _, serviceContainerName := range serviceContainerNames {
+		containerReferences[serviceContainerName] = nil
 	}
 
 	containers, err := cli.ContainerList(
@@ -92,26 +92,29 @@ func FetchContainerReferences(ctx context.Context, cli *client.Client) (map[stri
 	}
 
 	for _, container := range containers {
-		var containerServiceName string
-		for _, name := range container.Names {
-			name = strings.Replace(name, "/", "", -1)
-			if strings.HasPrefix(name, stack.ContainerNamePrefix) {
-				containerServiceName = name
-				break
-			}
-		}
-
-		if containerServiceName == "" {
+		containerName, ok := isNeoLocalContainer(container.Names)
+		if !ok {
 			continue
 		}
 
-		for _, serviceName := range containerNames {
-			if containerServiceName == serviceName {
-				containerReferences[containerServiceName] = container.ID
+		for _, serviceContainerName := range serviceContainerNames {
+			if containerName == serviceContainerName {
+				containerReferences[serviceContainerName] = &container
 				break
 			}
 		}
 	}
 
 	return containerReferences, nil
+}
+
+func isNeoLocalContainer(containerNames []string) (string, bool) {
+	for _, containerName := range containerNames {
+		containerName = strings.Replace(containerName, "/", "", -1)
+		if strings.HasPrefix(containerName, stack.ContainerNamePrefix) {
+			return containerName, true
+		}
+	}
+
+	return "", false
 }

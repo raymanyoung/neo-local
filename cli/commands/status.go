@@ -3,13 +3,10 @@ package commands
 import (
 	"errors"
 	"log"
-	"strings"
 
 	"github.com/CityOfZion/neo-local/cli/services"
-	"github.com/CityOfZion/neo-local/cli/stack"
 	"github.com/urfave/cli"
 
-	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
 	"golang.org/x/net/context"
 )
@@ -49,36 +46,21 @@ func (s Status) action() func(c *cli.Context) error {
 			return errors.New("Docker is not running")
 		}
 
-		services, err := stack.Services()
+		containerReferences, err := services.FetchContainerReferences(ctx, cli)
 		if err != nil {
 			return err
 		}
 
-		runningContainers, err := cli.ContainerList(ctx, types.ContainerListOptions{})
-		if err != nil {
-			return err
-		}
-
-		for _, container := range runningContainers {
-			containerName := ""
-			for _, name := range container.Names {
-				if strings.Contains(name, stack.ContainerNamePrefix) {
-					containerName = name
-					break
-				}
-			}
-
-			if containerName == "" {
-				continue
-			}
-
-			for _, service := range services {
-				if strings.Contains(containerName, service.ContainerName()) {
-					log.Printf(
-						"%s in '%s' state", service.Name, container.State,
-					)
-					break
-				}
+		for serviceContainerName, container := range containerReferences {
+			if container == nil {
+				log.Printf("'%s' does not exist", serviceContainerName)
+			} else {
+				log.Printf(
+					"'%s' in '%s' state (#%s)",
+					serviceContainerName,
+					container.State,
+					container.ID[:10],
+				)
 			}
 		}
 

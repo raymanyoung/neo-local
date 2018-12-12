@@ -58,14 +58,18 @@ func (d Down) action() func(c *cli.Context) error {
 			Force: true,
 		}
 
-		for containerName, containerID := range containerReferences {
-			if containerID == "" {
-				log.Printf("'%s' container already removed", containerName)
+		for serviceContainerName, container := range containerReferences {
+			if container == nil {
+				log.Printf("'%s' container already removed", serviceContainerName)
 				continue
 			}
 
-			log.Printf("'%s' container removed (%s)", containerName, containerID[:10])
-			if err := cli.ContainerRemove(ctx, containerID, options); err != nil {
+			log.Printf(
+				"'%s' container removed (%s)",
+				serviceContainerName,
+				container.ID[:10],
+			)
+			if err := cli.ContainerRemove(ctx, container.ID, options); err != nil {
 				return err
 			}
 		}
