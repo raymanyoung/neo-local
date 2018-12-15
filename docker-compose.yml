@@ -30,6 +30,19 @@ services:
     ports:
       - '20333:20333'
       - '30333:30333'
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 60s
+      test:
+        - CMD
+        - bash
+        - '-c'
+        - echo 1
+      timeout: 10s
+    labels:
+      autoheal: 'true'
+    restart: always
 
   neo-cli-privatenet-2:
     container_name: neo-cli-privatenet-2
