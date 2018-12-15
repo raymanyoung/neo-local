@@ -101,7 +101,8 @@ services:
       DB_PASSWORD: postgres
       DB_USERNAME: postgres
       NEO_NOTIFICATIONS_SERVER: 'http://${NOTIFICATIONS_SERVER}:8080/v1'
-      NEO_SEEDS: http://neo-cli-privatenet-1:30333;http://neo-cli-privatenet-2:30334;http://neo-cli-privatenet-3:30335;http://neo-cli-privatenet-4:30336
+      NEO_SEEDS: >-
+        http://neo-cli-privatenet-1:30333;http://neo-cli-privatenet-2:30334;http://neo-cli-privatenet-3:30335;http://neo-cli-privatenet-4:30336
       PORT: 4000
       REPLACE_OS_VARS: 'true'
     healthcheck:
@@ -141,7 +142,8 @@ services:
       DB_PASSWORD: postgres
       DB_USERNAME: postgres
       NEO_NOTIFICATIONS_SERVER: 'http://${NOTIFICATIONS_SERVER}:8080/v1'
-      NEO_SEEDS: http://neo-cli-privatenet-1:30333;http://neo-cli-privatenet-2:30334;http://neo-cli-privatenet-3:30335;http://neo-cli-privatenet-4:30336
+      NEO_SEEDS: >-
+        http://neo-cli-privatenet-1:30333;http://neo-cli-privatenet-2:30334;http://neo-cli-privatenet-3:30335;http://neo-cli-privatenet-4:30336
       REPLACE_OS_VARS: 'true'
     image: 'registry.gitlab.com/cityofzion/neo-scan/sync:latest'
     links:
@@ -160,9 +162,22 @@ services:
       - neo-cli-privatenet-2
       - neo-cli-privatenet-3
       - neo-cli-privatenet-4
-    image: cityofzion/neo-python:v0.8.2
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      test:
+        - CMD
+        - bash
+        - '-c'
+        - exec 6<>/dev/tcp/127.0.0.1/8080
+      timeout: 10s
+    image: 'cityofzion/neo-python:v0.8.2'
+    labels:
+      autoheal: 'true'
     ports:
       - '8080:8080'
+    restart: always
     volumes:
       - './notifications-server.config.json:/neo-python/custom-config.json'
 
