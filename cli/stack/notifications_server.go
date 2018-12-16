@@ -76,6 +76,6 @@ func NewNotificationsServer() (Service, error) {
 		},
 		Image: "neo-python",
 		Name:  "notifications-server",
-		Tag:   "v0.8.1",
+		Tag:   "v0.8.2",
 	}, nil
 }
