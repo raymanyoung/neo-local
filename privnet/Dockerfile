@@ -61,6 +61,7 @@ ADD ./wallets/* /opt/node/neo-cli/
 # Add scripts
 RUN wget https://s3.amazonaws.com/neo-experiments/neo-privnet.wallet
 ADD ./scripts/run.sh /opt/
+ADD ./scripts/healthcheck-node.sh /opt/
 ADD ./scripts/start_consensus_node.sh /opt/
 ADD ./scripts/claim_neo_and_gas_fixedwallet.py /neo-python/
 ADD ./scripts/claim_gas_fixedwallet.py /neo-python/

@@ -34,7 +34,7 @@ services:
         - CMD
         - bash
         - '-c'
-        - /opt/healcheck-node.sh
+        - /opt/healthcheck-node.sh
       timeout: 10s
     image: 'cityofzion/neo-local-privatenet:$NODE1_NEO_CLI_VERSION$BOOTSTRAP'
     labels:
@@ -56,7 +56,7 @@ services:
         - CMD
         - bash
         - '-c'
-        - /opt/healcheck-node.sh
+        - /opt/healthcheck-node.sh
       timeout: 10s
     image: 'cityofzion/neo-local-privatenet:$NODE2_NEO_CLI_VERSION$BOOTSTRAP'
     labels:
@@ -78,7 +78,7 @@ services:
         - CMD
         - bash
         - '-c'
-        - /opt/healcheck-node.sh
+        - /opt/healthcheck-node.sh
       timeout: 10s
     image: 'cityofzion/neo-local-privatenet:$NODE3_NEO_CLI_VERSION$BOOTSTRAP'
     labels:
@@ -100,7 +100,7 @@ services:
         - CMD
         - bash
         - '-c'
-        - /opt/healcheck-node.sh
+        - /opt/healthcheck-node.sh
       timeout: 10s
     image: 'cityofzion/neo-local-privatenet:$NODE4_NEO_CLI_VERSION$BOOTSTRAP'
     labels:
