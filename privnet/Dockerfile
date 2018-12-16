@@ -31,7 +31,8 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     vim \
     man \
-    libunwind8
+    libunwind8 \
+    jq
 
 # APT cleanup to reduce image size
 RUN rm -rf /var/lib/apt/lists/*
