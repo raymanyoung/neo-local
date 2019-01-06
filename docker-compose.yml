@@ -116,12 +116,25 @@ services:
       - neo-scan-api
     environment:
       NEOSCAN: 'neo-scan-api:4000'
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 20s
+      test:
+        - CMD
+        - bash
+        - '-c'
+        - exec 6<>/dev/tcp/127.0.0.1/4002
+      timeout: 10s
     image: 'cityofzion/neo-local-faucet:latest'
+    labels:
+      autoheal: 'true'
     links:
       - 'neo-scan-api:4000'
     ports:
       - '4002:4002'
-      
+    restart: always
+
   neo-python:
     container_name: neo-python
     depends_on:
@@ -219,7 +232,7 @@ services:
       - '8080:8080'
     volumes:
       - './notifications-server.config.json:/neo-python/custom-config.json'
-
+      
   postgres:
     container_name: postgres
     environment:
