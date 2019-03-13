@@ -252,7 +252,7 @@ services:
   notifications-server:
     command: >-
       /usr/bin/python3 /neo-python/neo/bin/api_server.py --config
-      /neo-python/custom-config.json --port-rest 8080
+      /neo-python/custom-config/config.json --port-rest 8080
     container_name: notifications-server
     depends_on:
       - neo-cli-privatenet-1
@@ -280,7 +280,7 @@ services:
     restart: always
     volumes:
       - >-
-        ./container-override-files/notifications-server/config.json:/neo-python/custom-config.json
+        ./container-override-files/notifications-server/custom-config/config.json:/neo-python/custom-config/config.json
       
   postgres:
     container_name: postgres
